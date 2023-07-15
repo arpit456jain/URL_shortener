@@ -3,7 +3,9 @@ import { Container, Form, Button } from "react-bootstrap";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-function Header() {
+import Header from "./Header";
+
+function Home() {
   const [name, setName] = useState("");
   const [link, setLink] = useState("");
   const [shortlink, setshortlink] = useState("");
@@ -90,6 +92,7 @@ function Header() {
   return (
     <>
       <ToastContainer />
+      <Header loginstatus={user}/> 
       <Container className="mt-5">
         <Form>
           {user ? (
@@ -130,4 +133,4 @@ function Header() {
   );
 }
 
-export default Header;
+export default Home;

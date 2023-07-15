@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState} from "react";
 import { Container, Form, Button } from "react-bootstrap";
 import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
+import Header from "./Header";
 
 function Login() {
   const [username, setUsername] = useState("");
@@ -34,7 +35,7 @@ function Login() {
           // Delay the redirect by 2 seconds
           setTimeout(() => {
             navigate(`/?username=${username}`); // Redirect to the desired path
-          }, 3000);
+          }, 2000);
         } else {
             setUsername("");
             setPassword("");
@@ -49,6 +50,7 @@ function Login() {
   return (
     <>
       <ToastContainer />
+      <Header/>  
       <Container className="mt-5 col-lg-6">
         <h1 className="mb-4">Login </h1>
         <Form>
