@@ -3,7 +3,7 @@ import { Navbar, Container, Nav } from "react-bootstrap";
 function Header({loginstatus}) {
   return (
     <>
-      <Navbar expand="lg" bg="dark" data-bs-theme="dark">
+      <Navbar className="navbar navbar-expand-lg navbar-dark">
         <Container>
           <Navbar.Brand href="#home">URL Shortner</Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />

@@ -4,6 +4,8 @@ import Home from "./components/Home";
 import { BrowserRouter as Router,Routes, Route } from 'react-router-dom';
 import Login from "./components/Login";
 import SignUp from "./components/SignUp";
+import './style.css'
+import Footer from "./components/Footer";
 function App() {
   return (
     <>
@@ -14,6 +16,8 @@ function App() {
         <Route path="/signup" element={<SignUp/>} exact/>
        </Routes>
       </Router>
+
+      <Footer></Footer>
     </>
     );
 }

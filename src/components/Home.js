@@ -85,7 +85,7 @@ function Home() {
     <>
       <ToastContainer />
       <Header loginstatus={user} />
-      <Container className="mt-5">
+      <Container className="mt-5 col-lg-7 col-md-10">
         <Form>
           {user ? (
             <h1> Welcome {name} Enter the Link you want to shorten</h1>
