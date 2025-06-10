@@ -19,6 +19,10 @@ h1 {
 	font-family: 'Hind', sans-serif;
 }
 
+h2{
+	color: #fff;
+}
+
 .title{
 	color: rgb(204, 7, 0);
 	text-transform: uppercase;

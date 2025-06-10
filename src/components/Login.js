@@ -1,66 +1,62 @@
-import React, { useState} from "react";
+import { useState} from "react";
 import { Container, Form, Button } from "react-bootstrap";
-import axios from "axios";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import Header from "./Header";
-
-function Login() {
+import {handleLogin} from "../RestApis"
+function Login({setUserID}) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  
   const navigate = useNavigate(); // React Router's useNavigate hook
-
-  function handleUserNameChange(event) {
-    setUsername(event.target.value);
-  }
-
-  function handlePasswordChange(event) {
-    setPassword(event.target.value);
-  }
-
-  function handleSubmit() {
-    console.log("submit ");
-    const url = `https://8tdgrcf0cc.execute-api.ap-south-1.amazonaws.com/default/z-alpha_api`;
-
+  function handleSubmit(event) {
+     event.preventDefault();
     const payload = {
-      "queryload": `SELECT EXISTS(SELECT 1 FROM url_shortener.user WHERE username='${username}' AND password='${password}') AS is_valid;`
+      "username": username,
+      "password": password
     };
-
-    axios.post(url, JSON.stringify(payload))
-      .then(response => {
-        if (response.data[0].is_valid === true) {
-          toast.success("Logged in successfully!");
-
-          // Delay the redirect by 2 seconds
-          setTimeout(() => {
-            navigate(`/?username=${username}`); // Redirect to the desired path
-          }, 2000);
-        } else {
-            setUsername("");
-            setPassword("");
-          toast.error("Wrong Username or Password");
+      handleLogin(payload).then(response => {
+        console.log(response)
+        if (response.status === 200) {
+          // localStorage.setItem('user',JSON.stringify(response.data));
+          sessionStorage.setItem("user", JSON.stringify(response.data));
+          toast.success("Login Successfully")
+          navigate('/');
+        }
+        else if(response.status === 404)
+        {
+          toast.error("user not found")
         }
       })
       .catch(error => {
-        console.error(error);
+       if (error.response) {
+      if (error.response.status === 404) {
+        toast.error("User not found");
+      } else if (error.response.status === 401) {
+        toast.error("Invalid credentials");
+      } else {
+        toast.error("Something went wrong");
+      }
+    } else {
+      toast.error("Network error or server down");
+    }
       });
   }
 
   return (
     <>
-      <ToastContainer />
+     
       <Header/>  
       <Container className="mt-5 col-lg-6">
         <h1 className="mb-4">Login </h1>
-        <Form>
+        <Form onSubmit={handleSubmit}>
           <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-            <Form.Control type="text" placeholder="Enter your username" value={username} onChange={handleUserNameChange} />
+            <Form.Control type="text" placeholder="Enter your username" value={username} onChange={(e)=>(setUsername(e.target.value))} />
           </Form.Group>
           <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-            <Form.Control type="password" placeholder="Enter your password" value={password} onChange={handlePasswordChange} />
+            <Form.Control type="password" placeholder="Enter your password" value={password} onChange={(e)=>(setPassword(e.target.value))} />
           </Form.Group>
-          <Button variant="info" onClick={handleSubmit}>Login</Button>
+          <Button variant="info" type="submit">Login</Button>
         </Form>
       </Container>
     </>
