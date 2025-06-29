@@ -19,7 +19,17 @@ function Login({setUserID}) {
         console.log(response)
         if (response.status === 200) {
           // localStorage.setItem('user',JSON.stringify(response.data));
-          sessionStorage.setItem("user", JSON.stringify(response.data));
+          // Save user details separately
+          const data = response.data;
+            sessionStorage.setItem("user", JSON.stringify({
+              user_id: data.user_id,
+              username: data.username,
+              name: data.name
+            }));
+
+            // Save access token and refresh token
+            sessionStorage.setItem("access_token", data.access);
+            sessionStorage.setItem("refresh_token", data.refresh);
           toast.success("Login Successfully")
           navigate('/');
         }
