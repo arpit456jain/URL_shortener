@@ -1,13 +1,16 @@
-import { useState} from "react";
+import { useContext, useState} from "react";
 import { Container, Form, Button } from "react-bootstrap";
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import Header from "./Header";
 import {handleLogin} from "../RestApis"
+import UserContext, { useUser } from "./UserContext";
 function Login({setUserID}) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  
+  // const {user1,setUser} = useContext(UserContext);
+  const {user1,setUser} = useUser();
+  console.log(user1,"in login")
   const navigate = useNavigate(); // React Router's useNavigate hook
   function handleSubmit(event) {
      event.preventDefault();
@@ -16,7 +19,6 @@ function Login({setUserID}) {
       "password": password
     };
       handleLogin(payload).then(response => {
-        console.log(response)
         if (response.status === 200) {
           // localStorage.setItem('user',JSON.stringify(response.data));
           // Save user details separately
@@ -26,7 +28,7 @@ function Login({setUserID}) {
               username: data.username,
               name: data.name
             }));
-
+            setUser(data.username)
             // Save access token and refresh token
             sessionStorage.setItem("access_token", data.access);
             sessionStorage.setItem("refresh_token", data.refresh);
@@ -63,7 +65,7 @@ function Login({setUserID}) {
           <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
             <Form.Control type="text" placeholder="Enter your username" value={username} onChange={(e)=>(setUsername(e.target.value))} />
           </Form.Group>
-          <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+          <Form.Group className="mb-3" controlId="exampleForm.ControlInput2">
             <Form.Control type="password" placeholder="Enter your password" value={password} onChange={(e)=>(setPassword(e.target.value))} />
           </Form.Group>
           <Button variant="info" type="submit">Login</Button>

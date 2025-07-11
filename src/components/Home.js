@@ -1,13 +1,16 @@
-import { useState} from "react";
+import { useContext, useState} from "react";
 import { Container, Form, Button } from "react-bootstrap";
 import { toast } from "react-toastify";
 import Header from "./Header";
 import {getShortLink} from "../RestApis"
 import { useNavigate } from "react-router-dom";
+import UserContext, { useUser } from "./UserContext";
 
 function Home() {
   // const user = JSON.parse(localStorage.getItem('user'))
   const user = JSON.parse(sessionStorage.getItem("user"));
+  const {user1} = useUser;
+  console.log("in home",user1);
   const [link, setLink] = useState("");
   const [shortlink, setShortlink] = useState("");
   const [linkGenerated, setLinkGenerated] = useState(false);

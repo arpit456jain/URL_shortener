@@ -7,9 +7,10 @@ import './style.css'
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 import Footer from "./components/Footer";
+import {UserContextProvider} from "./components/UserContext";
 function App() {
   return (
-    <>
+    <UserContextProvider>
     <ToastContainer />
     <Router>
       <Routes>
@@ -20,7 +21,7 @@ function App() {
       </Router>
 
       <Footer></Footer>
-    </>
+    </UserContextProvider>
     );
 }
 
