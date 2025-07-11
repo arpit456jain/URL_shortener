@@ -4,10 +4,13 @@ import { toast } from "react-toastify";
 import Header from "./Header";
 import {getShortLink} from "../RestApis"
 import { useNavigate } from "react-router-dom";
-
+import { useSelector } from "react-redux";
+import {userSlice} from "./userSlice"
 function Home() {
   // const user = JSON.parse(localStorage.getItem('user'))
   const user = JSON.parse(sessionStorage.getItem("user"));
+  const myData = useSelector(state => state.user);
+  console.log("state value ",myData)
   const [link, setLink] = useState("");
   const [shortlink, setShortlink] = useState("");
   const [linkGenerated, setLinkGenerated] = useState(false);

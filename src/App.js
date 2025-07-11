@@ -7,10 +7,14 @@ import './style.css'
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 import Footer from "./components/Footer";
+import {Provider} from 'react-redux'
+import { store } from "./store";
 function App() {
   return (
     <>
+    <Provider store={store}>
     <ToastContainer />
+    
     <Router>
       <Routes>
         <Route path="/" element={<Home/>} exact />
@@ -18,8 +22,9 @@ function App() {
         <Route path="/signup" element={<SignUp/>} exact/>
        </Routes>
       </Router>
-
+      
       <Footer></Footer>
+      </Provider>
     </>
     );
 }

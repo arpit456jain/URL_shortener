@@ -4,10 +4,12 @@ import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import Header from "./Header";
 import {handleLogin} from "../RestApis"
+import { useDispatch } from "react-redux";
+import {setUser,removeUser} from "./userSlice"
 function Login({setUserID}) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  
+  const userDispatch = useDispatch();
   const navigate = useNavigate(); // React Router's useNavigate hook
   function handleSubmit(event) {
      event.preventDefault();
@@ -21,6 +23,7 @@ function Login({setUserID}) {
           // localStorage.setItem('user',JSON.stringify(response.data));
           // Save user details separately
           const data = response.data;
+          userDispatch(setUser(data))
             sessionStorage.setItem("user", JSON.stringify({
               user_id: data.user_id,
               username: data.username,

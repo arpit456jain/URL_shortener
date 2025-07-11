@@ -2,11 +2,15 @@
 import { Navbar, Container, Nav } from "react-bootstrap";
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import {setUser,removeUser} from "./userSlice"
+import { useDispatch } from "react-redux";
 function Header({loginstatus}) {
+  const userDispath = useDispatch();
   const navigate = useNavigate();
 
   const handleLogout=()=>{
     sessionStorage.clear(); 
+    userDispath(removeUser())
     navigate("/login")
     toast.success("Logout Successfully")
   }
