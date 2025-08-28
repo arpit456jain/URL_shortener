@@ -12,7 +12,7 @@ function Home() {
   const [shortlink, setShortlink] = useState("");
   const [linkGenerated, setLinkGenerated] = useState(false);
   const navigate = useNavigate();
-  const BASE_API = process.env.REACT_APP_BASE_API;
+  const URL_SHORTEN = process.env.REACT_APP_URL_SHORTEN_API;
   function handleSubmit(event) {
     event.preventDefault();
     const token = sessionStorage.getItem("access_token");
@@ -23,7 +23,7 @@ function Home() {
 
     
       getShortLink(body,token).then((response) => {
-        setShortlink(`${BASE_API}/${response.data.short_code}`);
+        setShortlink(`${URL_SHORTEN}/${response.data.short_code}`);
         setLinkGenerated(true);
         toast.success("Short link generated successfully!!");  
       })
