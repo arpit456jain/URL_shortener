@@ -4,22 +4,24 @@ import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import Header from "./Header";
 import {handleLogin} from "../RestApis"
+import Spinner from "react-bootstrap/Spinner";
 function Login({setUserID}) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   
   const navigate = useNavigate(); // React Router's useNavigate hook
   function handleSubmit(event) {
      event.preventDefault();
+     setLoading(true);
     const payload = {
       "username": username,
-      "password": password
+      "password": password,
+      "project_name" : "url_shortner"
     };
       handleLogin(payload).then(response => {
         console.log(response)
         if (response.status === 200) {
-          // localStorage.setItem('user',JSON.stringify(response.data));
-          // Save user details separately
           const data = response.data;
             sessionStorage.setItem("user", JSON.stringify({
               user_id: data.user_id,
@@ -40,16 +42,19 @@ function Login({setUserID}) {
       })
       .catch(error => {
        if (error.response) {
-      if (error.response.status === 404) {
+      if (error.response.status === 404 || error.response.status === 403) {
         toast.error("User not found");
       } else if (error.response.status === 401) {
         toast.error("Invalid credentials");
-      } else {
+      }
+      else {
         toast.error("Something went wrong");
       }
     } else {
       toast.error("Network error or server down");
     }
+      }).finally(() => {
+        setLoading(false);
       });
   }
 
@@ -60,13 +65,21 @@ function Login({setUserID}) {
       <Container className="mt-5 col-lg-6">
         <h1 className="mb-4">Login </h1>
         <Form onSubmit={handleSubmit}>
-          <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+          <Form.Group className="mb-3" controlId="">
             <Form.Control type="text" placeholder="Enter your username" value={username} onChange={(e)=>(setUsername(e.target.value))} />
           </Form.Group>
-          <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+          <Form.Group className="mb-3" controlId="">
             <Form.Control type="password" placeholder="Enter your password" value={password} onChange={(e)=>(setPassword(e.target.value))} />
           </Form.Group>
-          <Button variant="info" type="submit">Login</Button>
+          {loading ? (
+            <Button variant="info" disabled type="submit">
+              <Spinner animation="border" variant="dark" />
+            </Button>
+          ) : (
+            <Button variant="info" type="submit">
+              Login
+            </Button>
+          )}
         </Form>
       </Container>
     </>

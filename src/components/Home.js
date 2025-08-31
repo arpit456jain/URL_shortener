@@ -4,17 +4,19 @@ import { toast } from "react-toastify";
 import Header from "./Header";
 import {getShortLink} from "../RestApis"
 import { useNavigate } from "react-router-dom";
-
+import Spinner from "react-bootstrap/Spinner";
 function Home() {
-  // const user = JSON.parse(localStorage.getItem('user'))
+  
   const user = JSON.parse(sessionStorage.getItem("user"));
   const [link, setLink] = useState("");
   const [shortlink, setShortlink] = useState("");
+  const [loading, setLoading] = useState(false);
   const [linkGenerated, setLinkGenerated] = useState(false);
   const navigate = useNavigate();
   const URL_SHORTEN = process.env.REACT_APP_URL_SHORTEN_API;
   function handleSubmit(event) {
     event.preventDefault();
+    setLoading(true);
     const token = sessionStorage.getItem("access_token");
     const body = {
       userId : user.user_id,
@@ -37,6 +39,8 @@ function Home() {
           toast.error("Some error occurred, please try again!!");
       }
       setLinkGenerated(false);
+      }).finally(()=>{
+        setLoading(false);
       });
     setLink("");
   }
@@ -66,13 +70,22 @@ function Home() {
               onChange={(e)=>(setLink(e.target.value))}
             />
           </Form.Group>
-          <Button
+          
+          {
+            loading ? 
+             <Button variant="info" disabled type="submit">
+              <Spinner animation="border" variant="dark" />
+            </Button> : 
+            
+            <Button
             variant="info"
             type="submit"
             disabled={!user}
           >
             Get Short Link
           </Button>
+
+          }
         </Form>
       </Container>
       <Container className="mt-5 col-lg-7 col-md-10">
